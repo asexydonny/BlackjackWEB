@@ -1,6 +1,7 @@
 let deck = [];
 let playerHand = [];
 let dealerHand = [];
+let gameOver = false; // NEW — stops actions after game ends
 
 const playerCards = document.getElementById("player-cards");
 const dealerCards = document.getElementById("dealer-cards");
@@ -73,19 +74,25 @@ function startGame() {
     playerHand = [deck.pop(), deck.pop()];
     dealerHand = [deck.pop(), deck.pop()];
     message.textContent = "";
+    gameOver = false; // RESET THE GAME
     renderCards();
 }
 
 function hit() {
+    if (gameOver) return; // NEW — stops hitting after game ends
+
     playerHand.push(deck.pop());
     renderCards();
 
     if (calculateScore(playerHand) > 21) {
         message.textContent = "You Busted!";
+        gameOver = true; // NEW
     }
 }
 
 function stand() {
+    if (gameOver) return; // NEW — stops standing after game ends
+
     while (calculateScore(dealerHand) < 17) {
         dealerHand.push(deck.pop());
     }
@@ -99,4 +106,7 @@ function stand() {
     else if (p > d) message.textContent = "You Win!";
     else if (p < d) message.textContent = "You Lose!";
     else message.textContent = "Draw!";
+
+    gameOver = true; // NEW
 }
+``
